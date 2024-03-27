@@ -7,7 +7,6 @@ import 'package:apk1/widgets/on_sale_widget.dart';
 import 'package:apk1/widgets/text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
 class OnSaleScreen extends StatelessWidget {
@@ -16,8 +15,6 @@ class OnSaleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    bool _isEmpty = false;
 
     Size size = Utils(context).getScreensize;
     final Color color = Utils(context).color;

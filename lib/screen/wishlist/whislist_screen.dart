@@ -1,8 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:apk1/inner_screen/product_details.dart';
 import 'package:apk1/providers/wishlist_provider.dart';
-import 'package:apk1/screen/cart/cart_widget.dart';
 import 'package:apk1/screen/wishlist/wishlist_whidget.dart';
 import 'package:apk1/services/global_methode.dart';
 import 'package:apk1/services/utils.dart';
@@ -24,7 +20,6 @@ class WishlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     
     final Color color = Utils(context).color;
-    Size size = Utils(context).getScreensize;
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     final wishlistItemsList =
         wishlistProvider.getWislistItems.values.toList().reversed.toList();

@@ -11,8 +11,6 @@ import 'package:apk1/screen/auth/forget_pass.dart';
 import 'package:apk1/screen/auth/loging.dart';
 import 'package:apk1/screen/auth/register.dart';
 import 'package:apk1/screen/btm_bar.dart';
-import 'package:apk1/screen/categories.dart';
-import 'package:apk1/screen/home_screen.dart';
 import 'package:apk1/screen/orders/order_widget.dart';
 import 'package:apk1/screen/viewed_recenty/viewed_recenty.dart';
 import 'package:apk1/screen/wishlist/whislist_screen.dart';

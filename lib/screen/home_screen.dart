@@ -2,7 +2,6 @@ import 'package:apk1/consts/consts.dart';
 import 'package:apk1/inner_screen/feeds_screen.dart';
 import 'package:apk1/inner_screen/on_salescreen.dart';
 import 'package:apk1/models/products_model.dart';
-import 'package:apk1/provider/dark_theme_provider.dart';
 import 'package:apk1/providers/product_provider.dart';
 import 'package:apk1/services/global_methode.dart';
 import 'package:apk1/services/utils.dart';
@@ -29,7 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   
   @override
   Widget build(BuildContext context) {
-    final themeState = Utils(context).getTheme;
     Size size = Utils(context).getScreensize;
     final Color color = Utils(context).color;
     final productProviders = Provider.of<ProductsProvider>(context);

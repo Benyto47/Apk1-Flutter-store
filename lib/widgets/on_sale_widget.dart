@@ -1,7 +1,6 @@
 import 'package:apk1/inner_screen/product_details.dart';
 import 'package:apk1/providers/cart_provider.dart';
 import 'package:apk1/providers/wishlist_provider.dart';
-import 'package:apk1/services/global_methode.dart';
 import 'package:apk1/services/utils.dart';
 import 'package:apk1/widgets/heart_btn.dart';
 import 'package:apk1/widgets/price_widget.dart';
@@ -28,7 +27,6 @@ class _OnSaleWidgetState extends State<OnSaleWidget> {
     
     final productModel = Provider.of<ProductModel>(context);
     final Color color = Utils(context).color;
-    final theme = Utils(context).getTheme;
     Size size = Utils(context).getScreensize;
     final cartProvider = Provider.of<CartProvider>(context);
     bool? _isInCart = cartProvider.getCartItems.containsKey(productModel.id);

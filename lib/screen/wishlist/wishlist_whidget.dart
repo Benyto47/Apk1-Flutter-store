@@ -2,7 +2,6 @@ import 'package:apk1/inner_screen/product_details.dart';
 import 'package:apk1/models/wishlist_model.dart';
 import 'package:apk1/providers/product_provider.dart';
 import 'package:apk1/providers/wishlist_provider.dart';
-import 'package:apk1/services/global_methode.dart';
 import 'package:apk1/services/utils.dart';
 import 'package:apk1/widgets/heart_btn.dart';
 import 'package:apk1/widgets/text_widget.dart';

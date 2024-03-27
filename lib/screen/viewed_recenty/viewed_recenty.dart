@@ -23,7 +23,7 @@ class _ViewedRecentlyScreenState extends State<ViewedRecentlyScreen> {
     bool _isEmpty = true;
     Color color = Utils(context).color;
     // Size size = Utils(context).getScreenSize;
-    return _isEmpty
+    return _isEmpty == true
         ? const EmptyScreen(
             title: 'Your history is empty',
             subtitle: 'No products has been viewed yet! :',

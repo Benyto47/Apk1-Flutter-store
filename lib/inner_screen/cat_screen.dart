@@ -1,4 +1,3 @@
-import 'package:apk1/consts/consts.dart';
 import 'package:apk1/models/products_model.dart';
 import 'package:apk1/providers/product_provider.dart';
 import 'package:apk1/services/utils.dart';
@@ -8,7 +7,6 @@ import 'package:apk1/widgets/feed_items.dart';
 import 'package:apk1/widgets/text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
 class CaregoryScreen extends StatefulWidget {

@@ -2,8 +2,6 @@ import 'package:apk1/inner_screen/product_details.dart';
 import 'package:apk1/services/global_methode.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
 import '../../services/utils.dart';
 import '../../widgets/text_widget.dart';
 
