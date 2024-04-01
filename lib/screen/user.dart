@@ -1,11 +1,14 @@
 import 'dart:async';
 
+import 'package:apk1/consts/firebase_const.dart';
 import 'package:apk1/provider/dark_theme_provider.dart';
+import 'package:apk1/screen/auth/loging.dart';
 import 'package:apk1/screen/orders/order_widget.dart';
 import 'package:apk1/screen/viewed_recenty/viewed_recenty.dart';
 import 'package:apk1/screen/wishlist/whislist_screen.dart';
 import 'package:apk1/services/global_methode.dart';
 import 'package:apk1/widgets/text_widget.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +30,8 @@ class _UserScreenState extends State<UserScreen> {
     _addressTextController.dispose();
     super.dispose();
   }
+
+  final User? user = authInstance.currentUser;
 
   @override
   Widget build(BuildContext context) {
@@ -139,10 +144,23 @@ class _UserScreenState extends State<UserScreen> {
                   color: color
                 ),
                  _listTiles(
-                    title: 'Logout',
-                    icon: IconlyLight.logout,
+                    title: user == null? 'Login' : 'Logout',
+                    icon: user == null? IconlyLight.login : IconlyLight.logout,
                     onPressed: () {
-                      GlobalMethods.WarnigDialog(title: 'Sign out', subtitle: 'Do you wanna sign out? ', fct: (){}, context: context);
+                       if (user == null) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => const LoginScreen()));
+                        return;
+                      }
+                      GlobalMethods.WarnigDialog(
+                        title: 'Sign out', 
+                        subtitle: 'Do you wanna sign out? ', 
+                        fct: () async{
+                         await authInstance.signOut();
+                         Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => const LoginScreen()));
+                        }, 
+                        context: context);
                     },
                     color: color),
               ],

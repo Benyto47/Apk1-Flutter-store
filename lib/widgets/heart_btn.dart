@@ -1,5 +1,8 @@
+import 'package:apk1/consts/firebase_const.dart';
 import 'package:apk1/providers/wishlist_provider.dart';
+import 'package:apk1/services/global_methode.dart';
 import 'package:apk1/services/utils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
@@ -17,6 +20,12 @@ class HeartBTN extends StatelessWidget {
     final Color color = Utils(context).color;
     return GestureDetector(
                               onTap: () {
+                                final User? user = authInstance.currentUser;
+                                if(user == null){
+                                  GlobalMethods.errorgDialog(subtitle: 'No user dound, please login first', context: context);
+                                  return;
+                                }
+                                //print('user id is ${user!.uid}');
                                 wishlistProvider.addRemouveProductsToWishlist(productId: productId);
                               },
                               child: Icon(

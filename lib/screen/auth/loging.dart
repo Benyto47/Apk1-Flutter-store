@@ -1,9 +1,13 @@
 import 'package:apk1/consts/consts.dart';
+import 'package:apk1/consts/firebase_const.dart';
 import 'package:apk1/screen/auth/forget_pass.dart';
 import 'package:apk1/screen/auth/register.dart';
+import 'package:apk1/screen/btm_bar.dart';
+import 'package:apk1/screen/loading_manager.dart';
 import 'package:apk1/widgets/auth_button.dart';
 import 'package:apk1/widgets/gooble_button.dart';
 import 'package:card_swiper/card_swiper.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:apk1/services/global_methode.dart';
@@ -32,11 +36,48 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _submitFormOnLogin() {
+
+
+   bool _isLoading = false;
+
+  void _submitFormOnLogin() async {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
+
+    setState(() {
+      _isLoading = true;
+    });
+
     if (isValid) {
-      print('THe form is valid');
+      _formKey.currentState!.save();
+
+//enregistre un compe sur firebase
+
+      try {
+        await authInstance.signInWithEmailAndPassword(
+            email: _emailTextController.text.toLowerCase().trim(),
+            password: _passTextController.text.trim());
+
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const BottomBarScreen()));
+
+        print('succefuly logged in');
+      } on FirebaseException catch (error) {
+        GlobalMethods.errorgDialog(
+            subtitle: '${error.message}', context: context);
+        setState(() {
+          _isLoading = false;
+        });
+      } catch (error) {
+        GlobalMethods.errorgDialog(subtitle: '$error', context: context);
+        setState(() {
+          _isLoading = false;
+        });
+      } finally {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -44,17 +85,20 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(children: [
-        Swiper(
-          duration: 800,
-          autoplayDelay: 8000,
-          itemBuilder: (BuildContext context, int index) {
-            return Image.asset(
-              Consts.authImagesPaths[index],
-              fit: BoxFit.cover,
-            );
-          },
-          autoplay: true,
-          itemCount: Consts.authImagesPaths.length,
+        LoadingManger(
+          isLoading: _isLoading,
+          child: Swiper(
+            duration: 800,
+            autoplayDelay: 8000,
+            itemBuilder: (BuildContext context, int index) {
+              return Image.asset(
+                Consts.authImagesPaths[index],
+                fit: BoxFit.cover,
+              );
+            },
+            autoplay: true,
+            itemCount: Consts.authImagesPaths.length,
+          ),
         ),
         Container(
           color: Colors.black.withOpacity(0.7),
@@ -231,7 +275,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 10,
                 ),
                 AuthButton(
-                  fct: () {},
+                  fct: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const BottomBarScreen()));
+                  },
                   buttonText: 'Continue as a guest',
                   primary: Colors.black,
                 ),

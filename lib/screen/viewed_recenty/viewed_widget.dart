@@ -1,10 +1,18 @@
+import 'package:apk1/consts/firebase_const.dart';
 import 'package:apk1/inner_screen/product_details.dart';
+import 'package:apk1/models/viewed_model.dart';
+import 'package:apk1/providers/product_provider.dart';
 import 'package:apk1/services/global_methode.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
-import '../../widgets/text_widget.dart';
+import 'package:flutter_iconly/flutter_iconly.dart';
+import 'package:provider/provider.dart';
+import '../../models/wishlist_model.dart';
+import '../../providers/cart_provider.dart';
 import '../../services/utils.dart';
+import '../../widgets/text_widget.dart';
 
 class ViewedRecentlyWidget extends StatefulWidget {
   const ViewedRecentlyWidget({Key? key}) : super(key: key);
@@ -16,6 +24,17 @@ class ViewedRecentlyWidget extends StatefulWidget {
 class _ViewedRecentlyWidgetState extends State<ViewedRecentlyWidget> {
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductsProvider>(context);
+
+    final viewedProdModel = Provider.of<ViewedProdModel>(context);
+
+    final getCurrProduct =
+        productProvider.findProductById(viewedProdModel.productId);
+    double usedPrice = getCurrProduct.isOnsale
+        ? getCurrProduct.salePrice
+        : getCurrProduct.price;
+    final cartProvider = Provider.of<CartProvider>(context);
+    bool? _isInCart = cartProvider.getCartItems.containsKey(getCurrProduct.id);
     Color color = Utils(context).color;
     Size size = Utils(context).getScreensize;
     return Padding(
@@ -30,7 +49,7 @@ class _ViewedRecentlyWidgetState extends State<ViewedRecentlyWidget> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             FancyShimmerImage(
-              imageUrl: 'https://i.ibb.co/F0s3FHQ/Apricots.png',
+              imageUrl: getCurrProduct.imageUrl,
               boxFit: BoxFit.fill,
               height: size.width * 0.27,
               width: size.width * 0.25,
@@ -41,7 +60,7 @@ class _ViewedRecentlyWidgetState extends State<ViewedRecentlyWidget> {
             Column(
               children: [
                 Textwidget(
-                  text: 'Title',
+                  text: getCurrProduct.title,
                   color: color,
                   textSizes: 24,
                   isTitle: true,
@@ -50,7 +69,7 @@ class _ViewedRecentlyWidgetState extends State<ViewedRecentlyWidget> {
                   height: 12,
                 ),
                 Textwidget(
-                  text: '\$12.88',
+                  text: '\$${usedPrice.toStringAsFixed(2)}',
                   color: color,
                   textSizes: 20,
                   isTitle: false,
@@ -65,11 +84,25 @@ class _ViewedRecentlyWidgetState extends State<ViewedRecentlyWidget> {
                 color: Colors.green,
                 child: InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    onTap: () {},
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
+                    onTap: _isInCart
+                        ? null
+                        : () {
+                           final User? user = authInstance.currentUser;
+                            if (user == null) {
+                              GlobalMethods.errorgDialog(
+                                  subtitle: 'No user dound, please login first',
+                                  context: context);
+                              return;
+                            }
+                            cartProvider.addProductsToCart(
+                              productId: getCurrProduct.id,
+                              quantity: 1,
+                            );
+                          },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: Icon(
-                        CupertinoIcons.add,
+                        _isInCart ? Icons.check : IconlyBold.plus,
                         color: Colors.white,
                         size: 20,
                       ),
