@@ -12,6 +12,7 @@ import 'package:flutter_iconly/flutter_iconly.dart';
 import '../../services/utils.dart';
 import '../../widgets/auth_button.dart';
 import '../../widgets/text_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RegisterScreen extends StatefulWidget {
   static const routeName = '/RegisterScreen';
@@ -67,7 +68,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
             email: _emailTextController.text.toLowerCase().trim(),
             password: _passTextController.text.trim());
           
-          Navigator.of(context).pushReplacement(MaterialPageRoute(
+        final User? user = authInstance.currentUser;
+        final _uid = user!.uid;
+
+        await FirebaseFirestore.instance.collection('users').doc(_uid).set({
+          'id': _uid,
+          'name': _fullNameController.text,
+          'email': _emailTextController.text.toLowerCase(),
+          'shipping-adress': _addressTextController.text,
+          'userWish': [],
+          'userCart': [],
+          'createdAt': Timestamp.now(),
+        });
+        
+       Navigator.of(context).pushReplacement(MaterialPageRoute(
             builder: (context) => const BottomBarScreen()));
 
         print('succefuly registed');
