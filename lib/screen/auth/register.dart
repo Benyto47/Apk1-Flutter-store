@@ -1,4 +1,5 @@
 import 'package:apk1/consts/firebase_const.dart';
+import 'package:apk1/fetch_screen.dart';
 import 'package:apk1/screen/auth/loging.dart';
 import 'package:apk1/screen/btm_bar.dart';
 import 'package:apk1/screen/loading_manager.dart';
@@ -82,7 +83,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         });
         
        Navigator.of(context).pushReplacement(MaterialPageRoute(
-            builder: (context) => const BottomBarScreen()));
+            builder: (context) => const FetchScreen()));
 
         print('succefuly registed');
       }on FirebaseException catch (error) {

@@ -1,4 +1,5 @@
 import 'package:apk1/consts/firebase_const.dart';
+import 'package:apk1/providers/product_provider.dart';
 import 'package:apk1/providers/wishlist_provider.dart';
 import 'package:apk1/services/global_methode.dart';
 import 'package:apk1/services/utils.dart';
@@ -16,17 +17,33 @@ class HeartBTN extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productProviders = Provider.of<ProductsProvider>(context);
+     final getCurrProduct = productProviders.findProductById(productId);
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     final Color color = Utils(context).color;
     return GestureDetector(
-                              onTap: () {
-                                final User? user = authInstance.currentUser;
-                                if(user == null){
-                                  GlobalMethods.errorgDialog(subtitle: 'No user dound, please login first', context: context);
-                                  return;
-                                }
+                              onTap: () async{
+                                try {
+                                  final User? user = authInstance.currentUser;
+                                  if (user == null) {
+                                    GlobalMethods.errorgDialog(
+                                        subtitle: 'No user dound, please login first',
+                                        context: context);
+                                    return;
+                                  }
+                                  if(isInWishlist == false && isInWishlist != null){
+                                    await GlobalMethods.addToWishlist(productId: productId, context: context);
+                                  }else{
+                                    await wishlistProvider.removeOneItem(
+                                      wishlistId: wishlistProvider.getWislistItems[getCurrProduct.id]!.id, 
+                                      productId: productId);
+                                  }
+                                  await wishlistProvider.fetchWishlist();
+                                } catch (error) {
+                                  
+                                }finally{}
                                 //print('user id is ${user!.uid}');
-                                wishlistProvider.addRemouveProductsToWishlist(productId: productId);
+                                // wishlistProvider.addRemouveProductsToWishlist(productId: productId);
                               },
                               child: Icon(
                                 isInWishlist != null && isInWishlist == true

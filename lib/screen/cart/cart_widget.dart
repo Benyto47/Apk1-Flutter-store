@@ -157,8 +157,12 @@ class _CardWidgetState extends State<CardWidget> {
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Column(children: [
                           InkWell(
-                            onTap: (){
-                              cartProvider.removeOneItem(cartModel.productId);
+                            onTap: ()async{
+                              await cartProvider.removeOneItem(
+                                cartId: cartModel.id,
+                                productId: cartModel.productId,
+                                quantity: cartModel.quantity
+                              );
                             },
                             child: const Icon(
                               CupertinoIcons.cart_badge_minus,
@@ -172,7 +176,7 @@ class _CardWidgetState extends State<CardWidget> {
                         isInWishlist: _isInWishlist,
                       ),
                           Textwidget(
-                            text: '\$${usedPrice.toStringAsFixed(2)}', 
+                            text: '\$${(usedPrice * int.parse(_quantityTextController.text)).toStringAsFixed(2)}', 
                             color: color, 
                             textSizes: 18,
                             maxLines: 1,)

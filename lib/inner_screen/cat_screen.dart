@@ -20,7 +20,8 @@ class CaregoryScreen extends StatefulWidget {
 class _CaregoryScreenState extends State<CaregoryScreen> {
   final TextEditingController? _searchTextController = TextEditingController();
   final FocusNode _searchTextFocusNode = FocusNode();
-
+  List<ProductModel> listProductSearch = [];
+ 
   @override
   void dispose() {
     _searchTextController!.dispose();
@@ -44,7 +45,7 @@ class _CaregoryScreenState extends State<CaregoryScreen> {
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         centerTitle: true,
         title: Textwidget(
-          text: 'All Products',
+          text: catName,
           color: color,
           textSizes: 24.0,
           isTitle: true,
@@ -64,7 +65,9 @@ class _CaregoryScreenState extends State<CaregoryScreen> {
                 child: TextField(
                   controller: _searchTextController,
                   onChanged: (value) {
-                    setState(() {});
+                    setState(() {
+                      listProductSearch = productProviders.searchQuery(value);
+                    });
                   },
                   decoration: InputDecoration(
                       focusedBorder: OutlineInputBorder(
@@ -92,16 +95,24 @@ class _CaregoryScreenState extends State<CaregoryScreen> {
                 ),
               ),
             ),
-            GridView.count(
+            _searchTextController!.text.isNotEmpty && listProductSearch.isEmpty
+            ? const EmptyProdWidget(text: 'No product found, please try another keyword')
+            :GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
               padding: EdgeInsets.zero,
               //crossAxisSpacing: 18,
               childAspectRatio: size.width / (size.height * 0.6),
-              children: List.generate(productByCat.length, (index) {
+              children: List.generate(
+                _searchTextController!.text.isNotEmpty
+                ?listProductSearch.length
+                :productByCat.length, (index) {
                 return ChangeNotifierProvider.value(
-                    value: productByCat[index], child: const FeedsWidget());
+                    value:
+                    _searchTextController!.text.isNotEmpty
+                    ?listProductSearch[index]
+                    :productByCat[index], child: const FeedsWidget());
               }),
             )
           ],

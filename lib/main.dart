@@ -1,4 +1,5 @@
 import 'package:apk1/consts/theme_data.dart';
+import 'package:apk1/fetch_screen.dart';
 import 'package:apk1/inner_screen/cat_screen.dart';
 import 'package:apk1/inner_screen/feeds_screen.dart';
 import 'package:apk1/inner_screen/on_salescreen.dart';
@@ -70,7 +71,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: Styles.themeData(themeProvider.getDarkTheme, context),
-          home: const BottomBarScreen(),
+          home: const FetchScreen(),
           routes: {
             OnSaleScreen.routeName: (ctx) => const OnSaleScreen(),
             FeesdScreen.routeName: (ctx) => const FeesdScreen(),

@@ -1,5 +1,6 @@
 import 'package:apk1/consts/consts.dart';
 import 'package:apk1/consts/firebase_const.dart';
+import 'package:apk1/fetch_screen.dart';
 import 'package:apk1/screen/auth/forget_pass.dart';
 import 'package:apk1/screen/auth/register.dart';
 import 'package:apk1/screen/btm_bar.dart';
@@ -59,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
             password: _passTextController.text.trim());
 
         Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => const BottomBarScreen()));
+            MaterialPageRoute(builder: (context) => const FetchScreen()));
 
         print('succefuly logged in');
       } on FirebaseException catch (error) {
@@ -277,7 +278,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 AuthButton(
                   fct: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const BottomBarScreen()));
+                        builder: (context) => const FetchScreen()));
                   },
                   buttonText: 'Continue as a guest',
                   primary: Colors.black,

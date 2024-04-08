@@ -1,4 +1,5 @@
 import 'package:apk1/providers/cart_provider.dart';
+import 'package:apk1/providers/product_provider.dart';
 import 'package:apk1/screen/cart/cart_widget.dart';
 import 'package:apk1/widgets/empty_screen.dart';
 import 'package:apk1/services/global_methode.dart';
@@ -29,6 +30,7 @@ class CartScreen extends StatelessWidget {
         )
         :  Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         elevation: 0,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Textwidget(
@@ -41,8 +43,9 @@ class CartScreen extends StatelessWidget {
              GlobalMethods.WarnigDialog(
                     title: 'Empty your cart?',
                     subtitle: 'Are you sure? ',
-                    fct: () {
-                      cartProvider.clearCart();
+                    fct: () async{
+                       await cartProvider.clearOnlineCart();
+                       cartProvider.clearLocalCart();
                     },
                     context: context);
           }, icon: Icon(
@@ -74,6 +77,16 @@ class CartScreen extends StatelessWidget {
 
     final Color color = Utils(context).color;
     Size size = Utils(context).getScreensize;
+    final cartProvider = Provider.of<CartProvider>(context);
+    final productsProvider = Provider.of<ProductsProvider>(context);
+    double total = 0.0;
+
+    cartProvider.getCartItems.forEach((key, value) {
+      final getCurrtProduct = productsProvider.findProductById(value.productId);
+      total += (getCurrtProduct.isOnsale
+                ? getCurrtProduct.salePrice
+                : getCurrtProduct.price) * value.quantity;
+    },);
 
     return     SizedBox(
             width: double.infinity,
@@ -101,7 +114,7 @@ class CartScreen extends StatelessWidget {
                 const Spacer(),
                 FittedBox(
                   child: Textwidget(
-                    text: 'Total: \$0.259', 
+                    text: 'Total: \$${total.toStringAsFixed(2)}', 
                     color: color, 
                     textSizes: 18, 
                     isTitle: true,))
