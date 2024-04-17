@@ -1,7 +1,10 @@
 import 'package:apk1/inner_screen/product_details.dart';
+import 'package:apk1/models/orders_model.dart';
+import 'package:apk1/providers/product_provider.dart';
 import 'package:apk1/services/global_methode.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../services/utils.dart';
 import '../../widgets/text_widget.dart';
 
@@ -13,25 +16,38 @@ class OrderWidget extends StatefulWidget {
 }
 
 class _OrderWidgetState extends State<OrderWidget> {
+
+  late String orderDateToShow;
+  
+  @override
+  void didChangeDependencies() {
+    final ordersModel = Provider.of<OrderModel>(context);
+    var orderDate = ordersModel.orderDate.toDate();
+    orderDateToShow = '${orderDate.day}/${orderDate.month}/${orderDate.year}/';
+    super.didChangeDependencies();
+  }
   @override
   Widget build(BuildContext context) {
+    final ordersModel = Provider.of<OrderModel>(context);
 
     final Color color = Utils(context).color;
     Size size = Utils(context).getScreensize;
+    final productProviders = Provider.of<ProductsProvider>(context);
+    final getCurrProduct = productProviders.findProductById(ordersModel.productId);
     
     return ListTile(
-      subtitle: const Text('Paid: \$12.8'),
+      subtitle:  Text('Paid: \$${double.parse(ordersModel.price).toStringAsFixed(2)}'),
       onTap: () {
         GlobalMethods.navigateTo(
             ctx: context, routeName: ProductDetails.routeName);
       },
       leading: FancyShimmerImage(
         width: size.width * 0.2,
-        imageUrl: 'https://i.ibb.co/F0s3FHQ/Apricots.png',
+        imageUrl: getCurrProduct.imageUrl,
         boxFit: BoxFit.fill,
       ),
-      title: Textwidget(text: 'Title  x12', color: color, textSizes: 18),
-      trailing: Textwidget(text: '03/08/2022', color: color, textSizes: 18),
+      title: Textwidget(text: '${getCurrProduct.title} *${ordersModel.quantity}', color: color, textSizes: 18),
+      trailing: Textwidget(text: orderDateToShow, color: color, textSizes: 18),
     );
   }
 }

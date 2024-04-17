@@ -1,7 +1,9 @@
+import 'package:apk1/providers/order_provider.dart';
 import 'package:apk1/screen/orders/orders_creen.dart';
 import 'package:apk1/widgets/back_widget.dart';
 import 'package:apk1/widgets/empty_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../services/utils.dart';
 import '../../widgets/text_widget.dart';
 
@@ -17,11 +19,16 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   @override
   Widget build(BuildContext context) {
-    final Color color = Utils(context).color;
-    bool _isEmpty = true;
     // Size size = Utils(context).getScreenSize;
-    return  _isEmpty == true ?
-       const EmptyScreen(
+    final Color color = Utils(context).color;
+    final ordersProvider = Provider.of<OrdersProvider>(context);
+    final ordersList = ordersProvider.getOrders;
+
+    return FutureBuilder(
+      future: ordersProvider.fetchOrders(),
+      builder: (context, snapshot){
+      return  ordersList.isEmpty
+        ?const EmptyScreen(
             title: 'You didnt place any order teyt',
             subtitle: 'oder someting and make me happy :',
             buttontext: 'shop now',
@@ -33,7 +40,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           elevation: 0,
           centerTitle: false,
           title: Textwidget(
-            text: 'Your orders (2)',
+            text: 'Your orders (${ordersList.length})',
             color: color,
             textSizes: 24.0,
             isTitle: true,
@@ -42,11 +49,13 @@ class _OrdersScreenState extends State<OrdersScreen> {
               Theme.of(context).scaffoldBackgroundColor.withOpacity(0.9),
         ),
         body: ListView.separated(
-          itemCount: 10,
+          itemCount: ordersList.length,
           itemBuilder: (ctx, index) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 2, vertical: 6),
-              child: OrderWidget(),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 6),
+              child: ChangeNotifierProvider.value(
+                value: ordersList[index],
+                child: const OrderWidget()),
             );
           },
           separatorBuilder: (BuildContext context, int index) {
@@ -56,5 +65,6 @@ class _OrdersScreenState extends State<OrdersScreen> {
             );
           },
         ));
+    });
   }
 }

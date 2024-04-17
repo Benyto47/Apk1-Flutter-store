@@ -1,4 +1,4 @@
-import 'package:apk1/provider/dark_theme_provider.dart';
+import 'package:apk1/providers/dark_theme_provider.dart';
 import 'package:apk1/providers/cart_provider.dart';
 import 'package:apk1/screen/cart/cart_screen.dart';
 import 'package:apk1/screen/categories.dart'; // Corrected typo

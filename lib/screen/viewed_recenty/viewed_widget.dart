@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
-import '../../models/wishlist_model.dart';
 import '../../providers/cart_provider.dart';
 import '../../services/utils.dart';
 import '../../widgets/text_widget.dart';

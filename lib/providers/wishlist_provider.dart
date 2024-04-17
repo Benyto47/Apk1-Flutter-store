@@ -22,9 +22,10 @@ class WishlistProvider with ChangeNotifier {
   //   notifyListeners();
   // }
 
-  final User? user = authInstance.currentUser;
+  
   final userCollecion = FirebaseFirestore.instance.collection('users');
   Future<void> fetchWishlist() async {
+    final User? user = authInstance.currentUser;
     final DocumentSnapshot userDoc = await userCollecion.doc(user!.uid).get();
 
     if (userDoc == null) {

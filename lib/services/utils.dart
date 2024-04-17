@@ -1,4 +1,4 @@
-import 'package:apk1/provider/dark_theme_provider.dart';
+import 'package:apk1/providers/dark_theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

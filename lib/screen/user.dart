@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:apk1/consts/firebase_const.dart';
-import 'package:apk1/provider/dark_theme_provider.dart';
+import 'package:apk1/providers/dark_theme_provider.dart';
 import 'package:apk1/screen/auth/forget_pass.dart';
 import 'package:apk1/screen/auth/loging.dart';
 import 'package:apk1/screen/loading_manager.dart';

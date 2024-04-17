@@ -45,12 +45,11 @@ class _LoginScreenState extends State<LoginScreen> {
     final isValid = _formKey.currentState!.validate();
     FocusScope.of(context).unfocus();
 
+    if (isValid) {
+      _formKey.currentState!.save();
     setState(() {
       _isLoading = true;
     });
-
-    if (isValid) {
-      _formKey.currentState!.save();
 
 //enregistre un compe sur firebase
 

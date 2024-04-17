@@ -9,20 +9,31 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 
-class HeartBTN extends StatelessWidget {
+class HeartBTN extends StatefulWidget {
   const HeartBTN({super.key, required this.productId,  this.isInWishlist = false});
 
   final String productId;
   final bool? isInWishlist;
 
   @override
+  State<HeartBTN> createState() => _HeartBTNState();
+}
+
+class _HeartBTNState extends State<HeartBTN> {
+  
+  bool loading = false;
+
+  @override
   Widget build(BuildContext context) {
     final productProviders = Provider.of<ProductsProvider>(context);
-     final getCurrProduct = productProviders.findProductById(productId);
+     final getCurrProduct = productProviders.findProductById(widget.productId);
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     final Color color = Utils(context).color;
     return GestureDetector(
                               onTap: () async{
+                                setState(() {
+                                  loading = true;
+                                });
                                 try {
                                   final User? user = authInstance.currentUser;
                                   if (user == null) {
@@ -31,26 +42,38 @@ class HeartBTN extends StatelessWidget {
                                         context: context);
                                     return;
                                   }
-                                  if(isInWishlist == false && isInWishlist != null){
-                                    await GlobalMethods.addToWishlist(productId: productId, context: context);
+                                  if(widget.isInWishlist == false && widget.isInWishlist != null){
+                                    await GlobalMethods.addToWishlist(productId: widget.productId, context: context);
                                   }else{
                                     await wishlistProvider.removeOneItem(
                                       wishlistId: wishlistProvider.getWislistItems[getCurrProduct.id]!.id, 
-                                      productId: productId);
+                                      productId: widget.productId);
                                   }
                                   await wishlistProvider.fetchWishlist();
+                                  setState(() {
+                                    loading = true;
+                                  });
                                 } catch (error) {
-                                  
-                                }finally{}
+                                  GlobalMethods.errorgDialog(subtitle: '$error', context: context);
+                                }finally{
+                                  setState(() {
+                                    loading = false;
+                                  });
+                                }
                                 //print('user id is ${user!.uid}');
                                 // wishlistProvider.addRemouveProductsToWishlist(productId: productId);
                               },
-                              child: Icon(
-                                isInWishlist != null && isInWishlist == true
+                              child: loading 
+                              ?const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: SizedBox(height: 15, width: 15, child: CircularProgressIndicator()),
+                              ) 
+                              :Icon(
+                                widget.isInWishlist != null && widget.isInWishlist == true
                                 ? IconlyBold.heart
                                 : IconlyLight.heart,
                                 size: 22,
-                                color: isInWishlist != null && isInWishlist == true ? Colors.red : color,
+                                color: widget.isInWishlist != null && widget.isInWishlist == true ? Colors.red : color,
                               ),
                             );
   }

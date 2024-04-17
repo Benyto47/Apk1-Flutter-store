@@ -4,8 +4,9 @@ import 'package:apk1/inner_screen/cat_screen.dart';
 import 'package:apk1/inner_screen/feeds_screen.dart';
 import 'package:apk1/inner_screen/on_salescreen.dart';
 import 'package:apk1/inner_screen/product_details.dart';
-import 'package:apk1/provider/dark_theme_provider.dart';
+import 'package:apk1/providers/dark_theme_provider.dart';
 import 'package:apk1/providers/cart_provider.dart';
+import 'package:apk1/providers/order_provider.dart';
 import 'package:apk1/providers/product_provider.dart';
 import 'package:apk1/providers/viewed_prod_provider.dart';
 import 'package:apk1/providers/wishlist_provider.dart';
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => WishlistProvider()),
         ChangeNotifierProvider(create: (_) => ViewedProdProvider()),
+        ChangeNotifierProvider(create: (_) => OrdersProvider()),
       ],
       child:
           Consumer<DarkThemeProvider>(builder: (context, themeProvider, child) {
